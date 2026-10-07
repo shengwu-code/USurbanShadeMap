@@ -1,7 +1,7 @@
 # High-resolution urban shade mapping
 
-Minimal, reproducible code accompanying a Nature Communications manuscript on
-high-resolution urban shade mapping. The repository contains two scripts:
+Minimal, reproducible code accompanying a study on high-resolution urban shade
+mapping. The repository contains two scripts:
 
 1. code/01_map_horizon_angles.py computes 36 directional horizon-angle (HA)
    layers from a 1 m digital surface model (DSM) using HORAYZON v1.2.
