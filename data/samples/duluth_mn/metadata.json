@@ -1,0 +1,14 @@
+{
+  "city_id": "24850",
+  "city_name": "Duluth, MN",
+  "latitude": 46.7665144,
+  "longitude": -92.1277932,
+  "timezone": "America/Chicago",
+  "dsm_units": "metres",
+  "dsm_original_encoding": "original city DSM multiplied by 0.1 to convert decimetres to metres",
+  "ha_output_grid": "central 1000 m x 1000 m at 1 m",
+  "ha_input_dsm_support": "central 2000 m x 2000 m at 1 m (500 m buffer)",
+  "horizon_search_distance_m": 500,
+  "tree_class_code_in_resulc": 2,
+  "tree_height_rule_m": "2 < HAG < 60"
+}

@@ -1,0 +1,14 @@
+{
+  "city_id": "51445",
+  "city_name": "Los Angeles, CA",
+  "latitude": 33.9849958,
+  "longitude": -118.122395,
+  "timezone": "America/Los_Angeles",
+  "dsm_units": "metres",
+  "dsm_original_encoding": "original city DSM multiplied by 0.1 to convert decimetres to metres",
+  "ha_output_grid": "central 1000 m x 1000 m at 1 m",
+  "ha_input_dsm_support": "central 2000 m x 2000 m at 1 m (500 m buffer)",
+  "horizon_search_distance_m": 500,
+  "tree_class_code_in_resulc": 2,
+  "tree_height_rule_m": "2 < HAG < 60"
+}

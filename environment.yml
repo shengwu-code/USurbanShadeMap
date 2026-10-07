@@ -1,0 +1,18 @@
+name: urban-shade-ha
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - embree
+  - tbb-devel
+  - cython
+  - setuptools
+  - numpy
+  - scipy
+  - rasterio
+  - affine
+  - pandas
+  - pvlib
+  - pyproj
+  - geographiclib
+  - pip

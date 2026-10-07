@@ -1,0 +1,14 @@
+{
+  "city_id": "77770",
+  "city_name": "St. Louis, MO",
+  "latitude": 38.636376,
+  "longitude": -90.3414179,
+  "timezone": "America/Chicago",
+  "dsm_units": "metres",
+  "dsm_original_encoding": "original city DSM multiplied by 0.1 to convert decimetres to metres",
+  "ha_output_grid": "central 1000 m x 1000 m at 1 m",
+  "ha_input_dsm_support": "central 2000 m x 2000 m at 1 m (500 m buffer)",
+  "horizon_search_distance_m": 500,
+  "tree_class_code_in_resulc": 2,
+  "tree_height_rule_m": "2 < HAG < 60"
+}
