@@ -5,9 +5,10 @@ mapping. The repository contains two scripts:
 
 1. code/01_map_horizon_angles.py computes 36 directional horizon-angle (HA)
    layers from a 1 m digital surface model (DSM) using HORAYZON v1.2.
-2. code/02_map_shade_example.py combines those HA layers with height above
-   ground (HAG) and NAIP-based urban land cover (resULC) to map cast shade,
-   tree self-shade and their union for 15 July 2020 at 14:00 local time.
+2. code/02_map_shade_example.py combines those HA layers with a co-registered
+   1 m height-above-ground (HAG) raster derived from the LiDAR point cloud and
+   NAIP-based urban land cover (resULC) to map cast shade, tree self-shade and
+   their union for 15 July 2020 at 14:00 local time.
 
 The three included examples are Los Angeles, CA; St. Louis, MO; and Duluth,
 MN. They are small, real-data subsets intended to demonstrate the workflow,
@@ -40,7 +41,9 @@ transmission used in selected study analyses.
 
 Each sample contains a 2 km x 2 km, 1 m DSM in metres. The scripts produce HA
 for its central 1 km x 1 km region, retaining a 500 m margin for a 500 m
-horizon search. HAG and resULC samples cover that central output grid.
+horizon search. Each sample also contains a native 1 m LiDAR-derived HAG that
+is co-registered with the central HA output grid. The resULC sample covers the
+same central domain and is aligned with nearest-neighbour resampling.
 
 ## Installation
 
@@ -69,7 +72,7 @@ clockwise from north.
 
     python code/02_map_shade_example.py \
       --ha results/los_angeles_ca_ha_zenith_1000m.tif \
-      --hag data/samples/los_angeles_ca/hag_1000m_source.tif \
+      --hag data/samples/los_angeles_ca/hag_1000m_1m_m.tif \
       --resulc data/samples/los_angeles_ca/resulc_1000m.tif \
       --metadata data/samples/los_angeles_ca/metadata.json \
       --output results/los_angeles_ca_shade_20200715_1400.tif
@@ -98,8 +101,10 @@ It writes high-resolution JPEG, editable SVG and PDF files in `figure/`.
 
 - DSM: projected, north-up raster at 1 m resolution, in **metres**. The DSM
   must include at least the output domain plus the chosen buffer on all sides.
-- HAG: a metric raster. It may have another resolution or alignment: Script 2
-  resamples it bilinearly to the 1 m HA grid.
+- HAG: a LiDAR-derived, projected, north-up raster at 1 m resolution, in
+  **metres**, with the same CRS, extent, dimensions and affine transform as the
+  HA grid. Script 2 reads HAG directly and deliberately performs no HAG
+  resampling.
 - resULC: a categorical land-cover raster. It is resampled with nearest
   neighbour; tree cover must use class code 2, or pass another value through
   the --tree-class option.

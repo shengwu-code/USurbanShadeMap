@@ -12,10 +12,9 @@ Each city directory contains:
 
 - dsm_2000m_1m_m.tif: 1 m LiDAR-derived DSM in metres. It includes the 500 m
   buffer used for HA ray tracing.
-- hag_1000m_source.tif: height above ground in metres. Script 2 resamples this
-  continuous quantity to the HA grid with bilinear interpolation. The bundled
-  example already has 1 m cells; the resampling step is retained so that the
-  same script works with HAG at other resolutions.
+- hag_1000m_1m_m.tif: native 1 m height above ground in metres, derived from
+  the normalized LiDAR point cloud and co-registered with the central 1 m HA
+  grid. Script 2 reads these values directly and performs no HAG resampling.
 - resulc_1000m.tif: NAIP-based categorical land cover. Class 2 is tree cover;
   Script 2 uses nearest-neighbour resampling.
 - ha_zenith_1000m_q0p01deg.tif: precomputed 36-band zenith-angle HA result.

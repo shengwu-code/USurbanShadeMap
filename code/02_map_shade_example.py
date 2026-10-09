@@ -24,7 +24,12 @@ def parse_args() -> argparse.Namespace:
         description="Map cast shade and tree self-shade for one local time."
     )
     parser.add_argument("--ha", type=Path, required=True, help="36-band zenith-angle HA GeoTIFF.")
-    parser.add_argument("--hag", type=Path, required=True, help="HAG raster in metres.")
+    parser.add_argument(
+        "--hag",
+        type=Path,
+        required=True,
+        help="LiDAR-derived 1 m HAG raster co-registered with the HA grid.",
+    )
     parser.add_argument("--resulc", type=Path, required=True, help="Categorical land-cover raster.")
     parser.add_argument(
         "--metadata",
@@ -69,6 +74,32 @@ def resample_to_ha_grid(
     return destination
 
 
+def read_aligned_hag(
+    path: Path,
+    reference: rasterio.io.DatasetReader,
+    source_nodata: float | None,
+) -> np.ndarray:
+    """Read a native 1 m HAG raster after strict co-registration checks."""
+    with rasterio.open(path) as src:
+        same_grid = (
+            src.count == 1
+            and src.width == reference.width
+            and src.height == reference.height
+            and src.crs == reference.crs
+            and src.transform.almost_equals(reference.transform)
+        )
+        if not same_grid:
+            raise ValueError(
+                "HAG must be a single-band, native 1 m raster co-registered "
+                "with the HA grid; HAG resampling is intentionally disabled."
+            )
+        hag = src.read(1).astype(np.float32)
+        nodata = source_nodata if source_nodata is not None else src.nodata
+        if nodata is not None:
+            hag[hag == nodata] = np.nan
+    return hag
+
+
 def main() -> None:
     args = parse_args()
     metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
@@ -92,9 +123,7 @@ def main() -> None:
             ha[ha == ha_ds.nodata] = np.nan
         ha_scale_factor = float(ha_ds.tags().get("scale_factor", 1.0))
         ha *= ha_scale_factor
-        hag = resample_to_ha_grid(
-            args.hag, ha_ds, Resampling.bilinear, args.hag_nodata, "float32"
-        )
+        hag = read_aligned_hag(args.hag, ha_ds, args.hag_nodata)
         resulc = resample_to_ha_grid(
             args.resulc, ha_ds, Resampling.nearest, None, "float32"
         )
@@ -146,7 +175,7 @@ def main() -> None:
                 f"{args.minimum_tree_height_m} < HAG < {args.maximum_tree_height_m} m"
             ),
             total_shade_rule="casting shade OR tree self-shade",
-            hag_resampling="bilinear to 1 m HA grid",
+            hag_grid="native 1 m LiDAR-derived HAG co-registered with HA; no resampling",
             resulc_resampling="nearest neighbour to 1 m HA grid",
         )
 
